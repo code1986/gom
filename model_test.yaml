@@ -1,0 +1,43 @@
+abbreviation:
+  table: user
+  colum: id, account_name, nick_name, password, create_time, data
+nameAlias:
+  id: ID
+  name: AccountName
+query:
+  - name: queryById
+    sql: select <colum> from <table> where id = ${id}
+  - name: queryOne
+    sql: select <colum> from <table> limit 1
+  - name: queryByName
+    sql: select <colum> from <table> where account_name = ${accountname}
+  - name: queryAll
+    sql: select <colum> from <table>
+exec:
+  - name: dropTable
+    sql: drop table <table>
+    
+  - name: createTable
+    sql: >-
+        create table if not exists <table> (
+          `id` bigint(20) NOT NULL AUTO_INCREMENT,
+          `account_name` varchar(32) NOT NULL,
+          `nick_name` varchar(32) NOT NULL,
+          `password` varchar(32) NOT NULL,
+          `create_time` timestamp NOT NULL,
+          `data` blob,
+          PRIMARY KEY (`id`),
+          UNIQUE KEY `account_name` (`account_name`),
+          KEY `nick_name` (`nick_name`)
+        )
+
+  - name: insert
+    sql: >- 
+        insert into <table> (<colum>)
+        values (default, ${AccountName}, ${NickName}, ${Password}, Now(), ${data})
+
+  - name: deleteById
+    sql: delete from <table> where id = ${id}
+
+  - name: clear
+    sql: delete from <table>

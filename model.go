@@ -251,13 +251,13 @@ func (m *modelImpl) Exec(c SQLConn, name string, args ...any) (int64, int64, err
 	return rowCount, lastID, nil
 }
 
-func findFileInDirs(file string, dirs string) string {
+func findFileInDirs(file string, dirs []string) string {
 
 	if _, err := os.Stat(file); err == nil {
 		return file
 	}
 
-	for _, dir := range strings.Split(dirs, ";") {
+	for _, dir := range dirs {
 		filePath := path.Join(dir, file)
 		if _, err := os.Stat(filePath); err == nil {
 			return filePath
@@ -267,7 +267,7 @@ func findFileInDirs(file string, dirs string) string {
 }
 
 // LoadModel ...
-func LoadModel(file string, dirs string, v any) (Model, error) {
+func LoadModel(file string, v any, dirs ...string) (Model, error) {
 	pickFile := findFileInDirs(file, dirs)
 
 	if pickFile == "" {

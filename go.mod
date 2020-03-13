@@ -1,4 +1,4 @@
-module gom
+module github.com/code1986/gom
 
 go 1.14
 

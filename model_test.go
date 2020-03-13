@@ -42,7 +42,7 @@ func getMockUserList() []*User {
 }
 
 func TestLoadModel(t *testing.T) {
-	m, err := LoadModel("model_test.yaml", "", &User{})
+	m, err := LoadModel("model_test.yaml", &User{})
 	if err != nil {
 		t.Error("load yaml file failed:", err)
 	} else {

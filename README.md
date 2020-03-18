@@ -5,11 +5,8 @@ golang的简单易用ORM工具
 这个ORM工具希望达到的目标
 
 1. 配置接入简单,易维护
-
 2. SQL完全可控
-
 3. 数据库查询结果和内存对象自动映射
-
 4. 学习成本低
 
 ## 使用方式
@@ -44,9 +41,15 @@ exec:
     sql: insert into <table> <colum> values (default, ${name}, ${age), Now()})
 ```
 
-query字段里面都是select查询语句, exec里面是更新和删除语句. query和exec中的name将在golang代码中使用,在单个yaml文件里面name需要是唯一的.
+query字段里面都是select查询语句
 
-abbreviation定义的是重复使用的片段, 在sql中出现的`<key>`都会自动替换成abbreviation中定义的值,如`select <colum> from <table>`会被替换为 `select id, name, age, create_time from user`.
+exec里面是更新和删除语句.
+
+query和exec中的name将在golang代码中使用,在单个yaml文件里面name需要是唯一的.
+
+abbreviation定义的是重复使用的片段, 在sql中出现的`<key>`都会自动替换成abbreviation中定义的值
+
+如`select <colum> from <table>`会被替换为 `select id, name, age, create_time from user`.
 
 ### 3.在代码中加载yaml
 ```golang
@@ -91,7 +94,7 @@ if err != nil {
 2| user, err := m.QueryRow(db, "queryById", 1)
 3| user, err := m.QueryRow(db, "queryById", User{ID:1})
 4| user, err := m.QueryRow(db, "queryById", &User{ID:1})
- |
+
 5| users, err := m.Query(db, "queryByAgeGT", 10)
 6| users, err := m.Query(db, "queryByAgeGT", User{Age:10})
 7| users, err := m.Query(db, "queryByAgeGT", &User{Age:10})

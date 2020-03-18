@@ -2,12 +2,15 @@
 golang的简单易用ORM工具
 
 ## 目标
-这个ORM工具希望达到
+这个ORM工具希望达到的目标
+
 1. 配置接入简单,易维护
+
 2. SQL完全可控
+
 3. 数据库查询结果和内存对象自动映射
+
 4. 学习成本低
-的目标
 
 ## 使用方式
 ### 1.建表
@@ -97,8 +100,11 @@ if err != nil {
 9| AffectRows, LastInsertID, err = m.Exec(db, "insert", &User{Name:"bob", Age:35})
 ```
 QueryRow查询一条结果
+
 Query查询结果列表
+
 Exec执行插入,更新,删除操作
+
 参数类型支持结构指针(4,7,9行),结构(3,6行)和变长的基础数据类型(2,5,8行).
 
 看个例子
@@ -139,8 +145,9 @@ if err != nil {
 }
 ```
 MultiInsert执行批量插入操作,最后参数2是每批插入数据.
+
 上例中sql是 insert into ...  values (xx, xx, xx, xx), 插入数据有5条,
-分批插入,每批2条数据, 实际执行的sql是
+分批插入,每批2条数据, 实际执行情况如下表
 
 |批次|sql|插入参数|
 |---|----|---|
@@ -148,5 +155,5 @@ MultiInsert执行批量插入操作,最后参数2是每批插入数据.
 |第2批|insert into ...  values (xx, xx, xx, xx), (xx, xx, xx, xx)|user[2], user[3]|
 |第3批|insert into ...  values (xx, xx, xx, xx)|user[4]|
 
-sql的扩展是自动的, 把values后面的括号内容按一批插入数量复制N-1份.
+sql的扩展是自动的, values后面的括号内容将按一批插入数量复制N-1份.
 

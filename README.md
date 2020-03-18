@@ -45,7 +45,7 @@ query字段里面都是select查询语句, exec里面是更新和删除语句. q
 
 abbreviation定义的是重复使用的片段, 在sql中出现的`<key>`都会自动替换成abbreviation中定义的值,如`select <colum> from <table>`会被替换为 `select id, name, age, create_time from user`.
 
-### 在代码中加载yaml
+### 3.在代码中加载yaml
 ```golang
 const (
 	DBUser     = "root"
@@ -81,10 +81,10 @@ if err != nil {
 定义User结构, 加载yaml文件, 创建数据库连接.
 **这里要注意,User必须实现Scan方法, Scan方法的参数顺序和select出来的字段顺序必须一致**
 
-### 使用yaml中的sql
+### 4.使用yaml中的sql
 ```golang
 1| users, err := m.Query(db, "queryAll")  
- |
+ 
 2| user, err := m.QueryRow(db, "queryById", 1)
 3| user, err := m.QueryRow(db, "queryById", User{ID:1})
 4| user, err := m.QueryRow(db, "queryById", &User{ID:1})
@@ -92,7 +92,7 @@ if err != nil {
 5| users, err := m.Query(db, "queryByAgeGT", 10)
 6| users, err := m.Query(db, "queryByAgeGT", User{Age:10})
 7| users, err := m.Query(db, "queryByAgeGT", &User{Age:10})
- |
+ 
 8| AffectRows, LastInsertID, err = m.Exec(db, "insert", "bob", 35)
 9| AffectRows, LastInsertID, err = m.Exec(db, "insert", &User{Name:"bob", Age:35})
 ```
@@ -118,7 +118,7 @@ sql: select <column> from <table> where Name = ${name} and Age = ${age}"
     
     \${name}将绑定第一个参数"bob", \${age}绑定第二个参数35, 此时函数参数顺序非常重要
 
-### 批量插入
+### 5.批量插入
 go的sql dirver不支持批量插入,gom对此做了增强,一个批量插入例子如下:
 ```go
 func getMockUserList() []*User {

@@ -85,6 +85,7 @@ if err != nil {
 }
 ```
 定义User结构, 加载yaml文件, 创建数据库连接.
+
 **这里要注意,User必须实现Scan方法, Scan方法的参数顺序和select出来的字段顺序必须一致**
 
 ### 4.使用yaml中的sql

@@ -266,12 +266,19 @@ func findFileInDirs(file string, dirs []string) string {
 	return ""
 }
 
+var yamlPath []string
+
+// AddYamlPaths add path for search yaml
+func AddYamlPaths(paths ...string) {
+	yamlPath = append(yamlPath, paths...)
+}
+
 // LoadModel ...
-func LoadModel(file string, v any, dirs ...string) (Model, error) {
-	pickFile := findFileInDirs(file, dirs)
+func LoadModel(file string, v any) (Model, error) {
+	pickFile := findFileInDirs(file, yamlPath)
 
 	if pickFile == "" {
-		return nil, fmt.Errorf("not found file %s in pat list: %s", file, dirs)
+		return nil, fmt.Errorf("not found file %s in pat list: %s", file, yamlPath)
 	}
 
 	m := &modelImpl{file: pickFile}

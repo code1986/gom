@@ -26,7 +26,10 @@ func (m *modelImpl) covertToObject(in reflect.Value) (any, error) {
 	v := reflect.New(m.vtype)
 	face := v.Interface()
 	method := v.MethodByName("Scan")
-	method.Call([]reflect.Value{in})
+	results := method.Call([]reflect.Value{in})
+	if err := results[0].Interface().(error); err != nil {
+		return nil, err
+	}
 	return face, nil
 }
 

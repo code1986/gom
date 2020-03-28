@@ -103,6 +103,14 @@ func TestLoadModel(t *testing.T) {
 		t.Logf("user: %v", user)
 	}
 
+	user, err = m.QueryRow(db, "select <colum> from <table> where account_name = ${accountname}", User{AccountName: "Aabbye"})
+	if err != nil {
+		t.Error("query by raw sql failed:", err)
+	} else {
+		t.Log("query by raw sql passed!")
+		t.Logf("user: %v", user)
+	}
+
 	n, _, err = m.Exec(db, "deleteById", user)
 	if err != nil {
 		t.Error("deleteById failed:", err)

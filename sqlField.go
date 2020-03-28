@@ -72,9 +72,16 @@ func (s *varQuery) getFieldArgs(v reflect.Value, FieldMap map[string]string) ([]
 		}
 
 		found := false
+
+		// if key is like "tag_id", alterKey will be "tagid"
+		var alterKey string
+		if strings.Contains(key, "_") {
+			alterKey = strings.ReplaceAll(key, "_", "")
+		}
+
 		for i := 0; i < fieldNum; i++ {
 			f := tp.Field(i)
-			if strings.EqualFold(f.Name, key) {
+			if strings.EqualFold(f.Name, key) || strings.EqualFold(f.Name, alterKey) {
 				ret = append(ret, v.FieldByName(f.Name).Interface())
 				found = true
 				break

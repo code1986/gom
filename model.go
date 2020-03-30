@@ -64,7 +64,7 @@ func (m *modelImpl) QueryRow(c SQLConn, name string, args ...any) (any, error) {
 		return nil, nil
 	}
 
-	return DefaultOrm.ToObjByType(result, m.vtype)
+	return ToObjByType(result, m.vtype)
 }
 
 func (m *modelImpl) Query(c SQLConn, name string, args ...any) ([]any, error) {
@@ -94,7 +94,7 @@ func (m *modelImpl) Query(c SQLConn, name string, args ...any) ([]any, error) {
 		return nil, err
 	}
 
-	return DefaultOrm.ToMultiObjsByType(rows, m.vtype)
+	return ToMultiObjsByType(rows, m.vtype)
 }
 
 var (

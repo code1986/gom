@@ -30,7 +30,7 @@ func (o *ormImp) parserType(v interface{}) (reflect.Type, error) {
 		if !ptr.MethodByName("Scan").IsValid() {
 			return nil, fmt.Errorf("%s not has [Scan] method", tp.Name())
 		}
-		fmt.Printf("found *%s.Scan method\n", tp.Name())
+		//fmt.Printf("found *%s.Scan method\n", tp.Name())
 	}
 
 	return tp, nil
@@ -80,4 +80,20 @@ func (o *ormImp) ToMultiObjsByType(rows *sql.Rows, vtype reflect.Type) (result [
 	}
 
 	return result, nil
+}
+
+func ToObj(row *sql.Row, temp interface{}) (any, error) {
+	return DefaultOrm.ToObj(row, temp)
+}
+
+func ToMultiObjs(rows *sql.Rows, temp interface{}) ([]any, error) {
+	return DefaultOrm.ToMultiObjs(rows, temp)
+}
+
+func ToObjByType(row *sql.Row, tp reflect.Type) (any, error) {
+	return DefaultOrm.ToObjByType(row, tp)
+}
+
+func ToMultiObjsByType(rows *sql.Rows, tp reflect.Type) ([]any, error) {
+	return DefaultOrm.ToMultiObjsByType(rows, tp)
 }

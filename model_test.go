@@ -162,5 +162,5 @@ func TestLoadModel(t *testing.T) {
 		t.Logf("clear table delete %d row", n)
 	}
 
-	t.Error("END")
+	//t.Error("END")
 }

@@ -41,6 +41,41 @@ func getMockUserList() []*User {
 	}
 }
 
+func TestOrm(t *testing.T) {
+
+	DBURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?%s", DBUser, DBPassword, DBIP, DBPort, Database, DBOptions)
+	db, err := sql.Open("mysql", DBURL)
+	if err != nil {
+		t.Error("open database error:", err)
+		return
+	}
+	t.Logf("open db passed!")
+
+	orm := NewOrm()
+	sql := `select * from user`
+	if rows, err := db.Query(sql); err != nil {
+		t.Error("execute sql get error:", err)
+	} else {
+		if users, err := orm.ToMultiObjs(rows, &User{}); err != nil {
+			t.Error("convert sql result get error:", err)
+		} else {
+			t.Log("queryAll passed!")
+			for i, v := range users {
+				t.Logf("%d. user: %v", i, v)
+			}
+		}
+	}
+
+	sql = `select * from user limit 1`
+	if row := db.QueryRow(sql); row != nil {
+		if user, err := orm.ToObj(row, &User{}); err != nil {
+			t.Error("convert sql result get error:", err)
+		} else {
+			t.Log("queryRow passed! user: ", user)
+		}
+	}
+}
+
 func TestLoadModel(t *testing.T) {
 	m, err := LoadModel("model_test.yaml", &User{})
 	if err != nil {
@@ -127,5 +162,5 @@ func TestLoadModel(t *testing.T) {
 		t.Logf("clear table delete %d row", n)
 	}
 
-	//t.Error("END")
+	t.Error("END")
 }

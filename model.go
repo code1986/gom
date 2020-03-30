@@ -22,17 +22,6 @@ type modelImpl struct {
 
 var _ Model = (*modelImpl)(nil)
 
-func (m *modelImpl) covertToObject(in reflect.Value) (any, error) {
-	v := reflect.New(m.vtype)
-	face := v.Interface()
-	method := v.MethodByName("Scan")
-	results := method.Call([]reflect.Value{in})
-	if results[0].Interface() != nil {
-		return nil, results[0].Interface().(error)
-	}
-	return face, nil
-}
-
 func (m *modelImpl) extractStruct(q *varQuery, arg interface{}) (useBuildArgs bool, buildArgs []any, err error) {
 	tp := reflect.TypeOf(arg)
 	v := reflect.ValueOf(arg)
@@ -71,11 +60,11 @@ func (m *modelImpl) QueryRow(c SQLConn, name string, args ...any) (any, error) {
 		result = c.QueryRow(q.SQL, args...)
 	}
 
-	if result != nil {
-		return m.covertToObject(reflect.ValueOf(result))
+	if result == nil {
+		return nil, nil
 	}
 
-	return nil, nil
+	return DefaultOrm.ToObjByType(result, m.vtype)
 }
 
 func (m *modelImpl) Query(c SQLConn, name string, args ...any) ([]any, error) {
@@ -105,17 +94,7 @@ func (m *modelImpl) Query(c SQLConn, name string, args ...any) ([]any, error) {
 		return nil, err
 	}
 
-	var result []any
-	defer rows.Close()
-	for rows.Next() {
-		obj, err := m.covertToObject(reflect.ValueOf(rows))
-		if err != nil {
-			return nil, err
-		}
-		result = append(result, obj)
-	}
-
-	return result, nil
+	return DefaultOrm.ToMultiObjsByType(rows, m.vtype)
 }
 
 var (

@@ -1,6 +1,9 @@
 package gom
 
-import "database/sql"
+import (
+	"database/sql"
+	"reflect"
+)
 
 type any = interface{}
 
@@ -18,6 +21,14 @@ type Model interface {
 	MultiInsert(c SQLConn, name string, slice any, batchSize int) (int64, int64, error)
 	QueryRow(c SQLConn, name string, args ...any) (any, error)
 	Query(c SQLConn, name string, args ...any) ([]any, error)
+}
+
+type Orm interface {
+	ToObj(*sql.Row, interface{}) (any, error)
+	ToMultiObjs(*sql.Rows, interface{}) ([]any, error)
+
+	ToObjByType(*sql.Row, reflect.Type) (any, error)
+	ToMultiObjsByType(*sql.Rows, reflect.Type) ([]any, error)
 }
 
 type Scanable interface {
